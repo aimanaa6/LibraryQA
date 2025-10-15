@@ -47,7 +47,7 @@ class BookTest {
         LocalDate borrowed = LocalDate.of(2025, 2, 1);
         LocalDate dayBeforeDue = borrowed.plusDays(b.getLoanDays() - 1);
 
-        assertFalse(b.isOverdue(borrowed, dayBeforeDue));
+        assertFalse(b.isOverdue(borrowed));
     }
 
     @Test
@@ -56,7 +56,7 @@ class BookTest {
         LocalDate borrowed = LocalDate.of(2025, 2, 1);
         LocalDate due = b.dueDate(borrowed);
 
-        assertFalse(b.isOverdue(borrowed, due));
+        assertFalse(b.isOverdue(borrowed));
     }
 
     @Test
@@ -65,7 +65,7 @@ class BookTest {
         LocalDate borrowed = LocalDate.of(2025, 2, 1);
         LocalDate dayAfterDue = b.dueDate(borrowed).plusDays(1);
 
-        assertTrue(b.isOverdue(borrowed, dayAfterDue));
+        assertTrue(b.isOverdue(borrowed));
     }
 
     @Test

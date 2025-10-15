@@ -28,7 +28,8 @@ public class Book extends LibraryItem {
     }
 
     @Override
-    public boolean isOverdue(LocalDate borrowedDate, LocalDate todaysDate) {
+    public boolean isOverdue(LocalDate borrowedDate) {
+        LocalDate todaysDate = LocalDate.now();
         return todaysDate.isAfter(dueDate(borrowedDate));
     }
     private int numberOfPages;
