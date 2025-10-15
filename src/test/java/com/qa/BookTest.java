@@ -18,7 +18,7 @@ class BookTest {
     }
 
     @Test
-    void numberOfPagesGetterSetter() {
+    void testNumberOfPagesGetterSetter() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
         assertEquals(100, b.getNumberOfPages());
 
@@ -27,13 +27,13 @@ class BookTest {
     }
 
     @Test
-    void getLoanDays_is30() {
+    void test_getLoanDays_is30() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
         assertEquals(30, b.getLoanDays());
     }
 
     @Test
-    void dueDate_isBorrowedDatePlusLoanDays() {
+    void test_dueDate_isBorrowedDatePlusLoanDays() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
         LocalDate borrowed = LocalDate.of(2025, 1, 1);
 
@@ -42,7 +42,7 @@ class BookTest {
     }
 
     @Test
-    void isOverdue_beforeDueDate_false() {
+    void test_isOverdue_beforeDueDate_false() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
         LocalDate borrowed = LocalDate.of(2025, 2, 1);
         LocalDate dayBeforeDue = borrowed.plusDays(b.getLoanDays() - 1);
@@ -51,7 +51,7 @@ class BookTest {
     }
 
     @Test
-    void isOverdue_onDueDate_false() {
+    void test_isOverdue_onDueDate_false() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
         LocalDate borrowed = LocalDate.of(2025, 2, 1);
         LocalDate due = b.dueDate(borrowed);
@@ -60,7 +60,7 @@ class BookTest {
     }
 
     @Test
-    void isOverdue_afterDueDate_true() {
+    void test_isOverdue_afterDueDate_true() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
         LocalDate borrowed = LocalDate.of(2025, 2, 1);
         LocalDate dayAfterDue = b.dueDate(borrowed).plusDays(1);
@@ -69,7 +69,7 @@ class BookTest {
     }
 
     @Test
-    void dueDate_usesGetLoanDaysOverride() {
+    void test_dueDate_usesGetLoanDaysOverride() {
         // Proves dueDate() relies on getLoanDays() rather than a hardcoded value
         class ShortLoanBook extends Book {
             ShortLoanBook() { super("X", "Y", 1, "Z", 10); }
