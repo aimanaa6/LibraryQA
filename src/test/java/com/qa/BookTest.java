@@ -21,7 +21,6 @@ class BookTest {
     void testNumberOfPagesGetterSetter() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
         assertEquals(100, b.getNumberOfPages());
-
         b.setNumberOfPages(250);
         assertEquals(250, b.getNumberOfPages());
     }
@@ -35,49 +34,48 @@ class BookTest {
     @Test
     void test_dueDate_isBorrowedDatePlusLoanDays() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
-        LocalDate borrowed = LocalDate.of(2025, 1, 1);
-
-        LocalDate expected = borrowed.plusDays(30);
-        assertEquals(expected, b.dueDate(borrowed));
+        LocalDate borrowed = LocalDate.now().minusDays(5);
+        assertEquals(borrowed.plusDays(30), b.dueDate(borrowed));
     }
 
     @Test
     void test_isOverdue_beforeDueDate_false() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
-        LocalDate borrowed = LocalDate.of(2025, 2, 1);
-        LocalDate dayBeforeDue = borrowed.plusDays(b.getLoanDays() - 1);
-
+        LocalDate today = LocalDate.now();
+        // Borrowed so that due date is tomorrow -> not overdue today
+        LocalDate borrowed = today.minusDays(b.getLoanDays() - 1);
         assertFalse(b.isOverdue(borrowed));
     }
 
     @Test
     void test_isOverdue_onDueDate_false() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
-        LocalDate borrowed = LocalDate.of(2025, 2, 1);
-        LocalDate due = b.dueDate(borrowed);
-
+        LocalDate today = LocalDate.now();
+        // Borrowed exactly loanDays ago -> due today -> not overdue
+        LocalDate borrowed = today.minusDays(b.getLoanDays());
         assertFalse(b.isOverdue(borrowed));
     }
 
     @Test
     void test_isOverdue_afterDueDate_true() {
         Book b = new Book("Test", "Fiction", 1, "Anon", 100);
-        LocalDate borrowed = LocalDate.of(2025, 2, 1);
-        LocalDate dayAfterDue = b.dueDate(borrowed).plusDays(1);
-
+        LocalDate today = LocalDate.now();
+        // Borrowed so that due date was yesterday -> overdue today
+        LocalDate borrowed = today.minusDays(b.getLoanDays() + 1);
         assertTrue(b.isOverdue(borrowed));
     }
 
     @Test
     void test_dueDate_usesGetLoanDaysOverride() {
-        // Proves dueDate() relies on getLoanDays() rather than a hardcoded value
         class ShortLoanBook extends Book {
             ShortLoanBook() { super("X", "Y", 1, "Z", 10); }
             @Override public int getLoanDays() { return 10; }
         }
 
         Book b = new ShortLoanBook();
-        LocalDate borrowed = LocalDate.of(2025, 3, 10);
+        LocalDate today = LocalDate.now();
+        LocalDate borrowed = today.minusDays(11); // due was yesterday for 10-day loan
         assertEquals(borrowed.plusDays(10), b.dueDate(borrowed));
+        assertTrue(b.isOverdue(borrowed)); // overdue today
     }
 }
