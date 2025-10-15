@@ -2,7 +2,7 @@ package com.qa;
 
 import java.time.LocalDate;
 
-public class Book extends LibraryItem implements Loanable{
+public class Book extends LibraryItem {
     public Book(String title, String genre, int copies, String author, int numberOfPages) {
         super(title, genre, copies, author);
         this.numberOfPages = numberOfPages;

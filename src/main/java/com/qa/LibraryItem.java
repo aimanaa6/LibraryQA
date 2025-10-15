@@ -1,6 +1,6 @@
 package com.qa;
 
-public abstract class LibraryItem {
+public abstract class LibraryItem implements Loanable{
     public String getTitle() {
         return title;
     }
