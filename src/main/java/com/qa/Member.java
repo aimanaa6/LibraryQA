@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 // generics - and can work with LibraryItem
 public class Member <T extends LibraryItem> {
@@ -32,8 +33,8 @@ public class Member <T extends LibraryItem> {
 
     }
 
-    public LocalDate getBorrowedDate(T item){
-        return loans.get(item);
+    public Optional<LocalDate> getBorrowedDate(T item) {
+        return Optional.ofNullable(loans.get(item));
     }
 
     public Map<T, LocalDate> getLoans() {

@@ -65,16 +65,19 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("getBorrowedDate returns correct date or null if not borrowed")
+    @DisplayName("getBorrowedDate returns Optional.empty when not borrowed; Optional with correct date after borrowing")
     void testGetBorrowedDate(Member<Book> member) {
         LocalDate date = LocalDate.of(2025, 5, 15);
 
-        // Not borrowed yet
-        assertNull(member.getBorrowedDate(sampleBook), "Should return null if not borrowed");
+        // Not borrowed yet → Optional.empty
+        assertTrue(member.getBorrowedDate(sampleBook).isEmpty(),
+                "Should be Optional.empty if not borrowed");
 
-        // After borrowing
-        member.addLoan(sampleBook, date);
-        assertEquals(date, member.getBorrowedDate(sampleBook),
+        // After borrowing → Optional contains the exact stored date
+        assertTrue(member.addLoan(sampleBook, date));
+        assertTrue(member.getBorrowedDate(sampleBook).isPresent(),
+                "Should be present after borrowing");
+        assertEquals(date, member.getBorrowedDate(sampleBook).orElseThrow(),
                 "Should return the stored borrowed date");
     }
 }
